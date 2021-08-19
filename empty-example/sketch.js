@@ -1,8 +1,7 @@
 var grid;
-var nextGrid; //Not space efficient: As the next
+var nextGrid;
 
 function setup() {
-  // put setup code here
   createCanvas(200,200);
   pixelDensity(1);
   grid = [];
@@ -21,23 +20,36 @@ function setup() {
 }
 
 function draw() {
-  // put drawing code here
   background(51);
 
-  loadPixels();
+  for(var x = 0; x < width; x++){
+    for(var y = 0; y < height; y++) {
+      nextGrid[x][y].a = grid[x][y].a * 0.9;
+      nextGrid[x][y].b = grid[x][y].b * 1.0;
+    }
+  }
+
+  loadPixels(); //Key - p5.js function
 
   //This creating a mapping between the grids (representations of our canvas) and the screen displaying pixels
   //**  Look up pixel array in p5 and see how it works */
   for(var x = 0; x < width; x++){
     for(var y = 0; y < height; y++) {
       var pix = (x + y * width) * 4; // The pixel array is *1-Dimensional* and has 4 spots for every pixel (The colours - RGBA - Red Green Blue Alpha(Transparency))
-      pixels[pix + 0] = grid[x][y].a * 255; //RED - multiplied to convert to pixel
+      pixels[pix + 0] = nextGrid[x][y].a * 255; //RED - multiplied to convert to pixel
       pixels[pix + 1] = 0;
-      pixels[pix + 2] = grid[x][y].b * 255; //BLUE
+      pixels[pix + 2] = nextGrid[x][y].b * 255; //BLUE
       pixels[pix + 3] = 255;
-      
     }
   }
 
-  updatePixels();
+  updatePixels(); //Key - p5.js function
+
+  swapGridToNewGen();
+}
+
+function swapGridToNewGen() {
+  var tempGrid = grid;
+  grid = nextGrid;
+  nextGrid = tempGrid;
 }

@@ -2,13 +2,45 @@
 var grid;
 var next;
 
-var dA = 1;
-var dB = 0.5;
-var feed = 0.055;
-var k = 0.062;
+var fr = 60;
+var time = 1;
+var offsetX0 = Math.floor(1* Math.random());
+var offsetY0 = Math.floor(25* Math.random());
+
+
+//SEED Positioning Offset
+var offsetX1 = Math.floor(10* Math.random());
+var offsetY1 = Math.floor(10* Math.random());
+var offsetX2 = Math.floor(1* Math.random());
+var offsetY2 = Math.floor(30* Math.random());
+var offsetX3 = Math.floor(30* Math.random());
+var offsetY3 = Math.floor(1* Math.random());
+
+var offsetX4 = Math.floor(40* Math.random());
+var offsetY4 = Math.floor(40* Math.random());
+var offsetX5 = Math.floor(50* Math.random());
+var offsetY5 = Math.floor(60* Math.random());
+
+var offsetX6 = Math.floor(30* Math.random());
+var offsetY6 = Math.floor(60* Math.random());
+var offsetX7 = Math.floor(55* Math.random());
+var offsetY7 = Math.floor(60* Math.random());
+var offsetX8 = Math.floor(75* Math.random());
+var offsetY8 = Math.floor(75* Math.random());
+var offsetX9 = Math.floor(70* Math.random());
+var offsetY9 = Math.floor(70* Math.random());
+var offsetX10 = Math.floor(80* Math.random());
+var offsetY10 = Math.floor(1* Math.random());
+
+var dA = 1.25;
+var dB = 2;
+var feed = 0.0248;
+var kill = 0.055;
 
 function setup() {
-  createCanvas(200, 200);
+  createCanvas(100, 100);
+  colorMode(HSB); //Colour cycling - HSB:Hue, Saturation, Brightness
+  frameRate(fr);
   pixelDensity(1);
   grid = [];
   next = [];
@@ -30,16 +62,30 @@ function setup() {
     }
   }
 
-  //initial seed of chemicals of centre of Grid
-  for (var i = 100; i < 110; i++) {
-    for (var j = 100; j < 110; j++) {
-      grid[i][j].b = 1;
+  //initial SEED of chemicals of centre of Grid
+  for (var i = 10; i < 20; i++) {
+    for (var j = 10; j < 20; j++) {
+      grid[i+offsetX0][j+offsetY0].b = 1;
+      grid[i+offsetX1][j+offsetY1].b = 1; 
+      grid[i+offsetX2][j+offsetY2].b = 1;
+      grid[i+offsetX3][j+offsetY3].b = 1;  
+      grid[i+offsetX4][j+offsetY4].b = 1;
+      grid[i+offsetX5][j+offsetY5].b = 1;
+      grid[i+offsetX6][j+offsetY6].b = 1;       
+      grid[i+offsetX7][j+offsetY7].b = 1;       
+      grid[i+offsetX8][j+offsetY8].b = 1;       
+      grid[i+offsetX9][j+offsetY9].b = 1;       
+      grid[i+offsetX10][j+offsetY10].b = 1;       
+
+      
+       
     }
   }
 }
 
 function draw() {
   background(51);
+  print(frameRate());
 
   for (var x = 1; x < width - 1; x++) {
     for (var y = 1; y < height - 1; y++) {
@@ -48,8 +94,8 @@ function draw() {
 
       //The actual Reaction-Diffusion Equation
       //http://karlsims.com/rd.html
-      next[x][y].a = a + dA * laplaceA(x, y) - a * b * b + feed * (1 - a);
-      next[x][y].b = b + dB * laplaceB(x, y) + a * b * b - (k + feed) * b;
+      next[x][y].a = (a + dA * laplaceA(x, y) - a * b * b + feed * (1 - a)) * time;
+      next[x][y].b = (b + dB * laplaceB(x, y) + a * b * b - (kill + feed) * b) * time;
 
       //maps it to between 0 and 1
       next[x][y].a = constrain(next[x][y].a, 0, 1);
@@ -66,8 +112,8 @@ function draw() {
       var a = next[x][y].a;
       var b = next[x][y].b;
       var c = floor((a - b) * 255);
-      c = constrain(c, 0, 255);
-      pixels[pix + 0] = c;
+      // c = constrain(c, 0, 255);
+      pixels[pix + 0] = a*255;
       pixels[pix + 1] = c;
       pixels[pix + 2] = c;
       pixels[pix + 3] = 255;

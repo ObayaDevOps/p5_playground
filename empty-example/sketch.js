@@ -33,13 +33,15 @@ var offsetX10 = Math.floor(80* Math.random());
 var offsetY10 = Math.floor(1* Math.random());
 
 var dA = 1.25;
-var dB = 2;
+var dB = 2
 var feed = 0.0248;
 var kill = 0.055;
 
+
 function setup() {
   createCanvas(100, 100);
-  colorMode(HSB); //Colour cycling - HSB:Hue, Saturation, Brightness
+  // colorMode(HSB); //Colour cycling - HSB:Hue, Saturation, Brightness
+
   frameRate(fr);
   pixelDensity(1);
   grid = [];
@@ -61,12 +63,12 @@ function setup() {
       };
     }
   }
-
+  
   //initial SEED of chemicals of centre of Grid
   for (var i = 10; i < 20; i++) {
     for (var j = 10; j < 20; j++) {
       grid[i+offsetX0][j+offsetY0].b = 1;
-      grid[i+offsetX1][j+offsetY1].b = 1; 
+       grid[i+offsetX1][j+offsetY1].b = 1; 
       grid[i+offsetX2][j+offsetY2].b = 1;
       grid[i+offsetX3][j+offsetY3].b = 1;  
       grid[i+offsetX4][j+offsetY4].b = 1;
@@ -75,20 +77,21 @@ function setup() {
       grid[i+offsetX7][j+offsetY7].b = 1;       
       grid[i+offsetX8][j+offsetY8].b = 1;       
       grid[i+offsetX9][j+offsetY9].b = 1;       
-      grid[i+offsetX10][j+offsetY10].b = 1;       
-
-      
-       
+      grid[i+offsetX10][j+offsetY10].b = 1;              
     }
   }
 }
 
 function draw() {
-  background(51);
+  // background(51);
   print(frameRate());
 
-  for (var x = 1; x < width - 1; x++) {
-    for (var y = 1; y < height - 1; y++) {
+  if (frameCount === 1) {
+    capturer.start()
+  }
+
+  for (var x = 10; x < width - 10; x++) {
+    for (var y = 10; y < height - 10; y++) {
       var a = grid[x][y].a;
       var b = grid[x][y].b;
 
@@ -111,17 +114,24 @@ function draw() {
       var pix = (x + y * width) * 4; // The pixel array is *1-Dimensional* and has 4 spots for every pixel (The colours - RGBA - Red Green Blue Alpha(Transparency))
       var a = next[x][y].a;
       var b = next[x][y].b;
-      var c = floor((a - b) * 255);
-      // c = constrain(c, 0, 255);
+      var c = floor((a - b) * 255 );
+      c = constrain(c, 0, 255);
       pixels[pix + 0] = a*255;
-      pixels[pix + 1] = c;
-      pixels[pix + 2] = c;
+      pixels[pix + 1] = c;//c;
+      pixels[pix + 2] = b*255;
       pixels[pix + 3] = 255;
     }
   }
   updatePixels();
 
   swap();
+
+  if(frameCount < 60 * 5) {
+    capturer.capture(canvas)
+  } else if ( frameCount === 60 * 5) {
+    capturer.save();
+    capturer.stop();
+  }
 }
 
 //Laplacian functions perform 'convolutions'

@@ -1,44 +1,48 @@
 
 
 var inc = 0.1;
+var scl = 10;
+var rows, cols;
+var fr; //frameRate
 
+var zoff = 0;
 
 function setup() {
   // put setup code here
   // createCanvas(3840, 2160);
-  // createCanvas(1920,1080);
-  createCanvas(200,200);
-  pixelDensity(1);
-  // noiseDetail(8);
-
+  createCanvas(1920,1080);
+  // createCanvas(200,200);
+  cols = floor(width/scl);
+  rows = floor(height/scl);
+  fr = createP(''); //creates a paragraph elemer
 }
 
 function draw() {
   // put drawing code here
   var xoff = 0;
+  background(255);
+  // randomSeed(100);
 
-  loadPixels();
-  for(var x=0; x< width; x++)  {  
+  for(var x=0; x< cols; x++)  {  
     var yoff = 0;
-    for(var y=0; y< height; y++)  { 
-      //calculating the pixel index
-      var index =( x + y * width) * 4;
-      var r =  noise(xoff, yoff)*255;
+    for(var y=0; y< rows; y++)  { 
+      var angle =  noise(xoff, yoff, zoff)*TWO_PI;
+      var vect = p5.Vector.fromAngle(angle); //radians
 
-      var randRed = map(noise(r), 0,1,0,255);
-      var randGreen = map(noise(r), 0,1,0,255);
-      var randBlue = map(noise(r), 0,1,0,255);
-
-
-      pixels[index+0] = r;
-      pixels[index+1] = r;
-      pixels[index+2] = r;
-      pixels[index+3] = 255;
       yoff += inc;
+      fill(angle);
+      stroke(0);
+      push();
+      translate(x*scl, y*scl);
+      rotate(vect.heading());
+      line(0,0,scl,0)
+      pop();
+
     }
     xoff += inc;
+    zoff += inc/65;
   }
 
+  fr.html(floor(frameRate()));
   // noLoop();
-  updatePixels();
 }

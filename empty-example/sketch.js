@@ -1,6 +1,6 @@
 
 
-var inc = 0.001;
+var inc = 0.1;
 
 
 function setup() {
@@ -9,6 +9,8 @@ function setup() {
   // createCanvas(1920,1080);
   createCanvas(200,200);
   pixelDensity(1);
+  // noiseDetail(8);
+
 }
 
 function draw() {
@@ -28,9 +30,9 @@ function draw() {
       var randBlue = map(noise(r), 0,1,0,255);
 
 
-      pixels[index+0] = randGreen;
-      pixels[index+1] = randRed;
-      pixels[index+2] = randBlue;
+      pixels[index+0] = r;
+      pixels[index+1] = r;
+      pixels[index+2] = r;
       pixels[index+3] = 255;
       yoff += inc;
     }

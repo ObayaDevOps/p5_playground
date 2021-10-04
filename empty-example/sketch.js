@@ -1,21 +1,41 @@
-var xoff1 = 0; 
-var xoff2 = 100000; 
+
+
+var inc = 0.01;
 
 
 function setup() {
   // put setup code here
-  createCanvas(400, 400);
+  // createCanvas(3840, 2160);
+  createCanvas(1920,1080);
+  pixelDensity(1);
 }
 
 function draw() {
   // put drawing code here
-  background(51);
-  var x = map(noise(xoff1), 0, 1, 0, width);
-  var y = map(noise(xoff2), 0, 1, 0, height);
+  var xoff = 0;
+
+  loadPixels();
+  for(var x=0; x< width; x++)  {  
+    var yoff = 0;
+    for(var y=0; y< height; y++)  { 
+      //calculating the pixel index
+      var index =( x + y * width) * 4;
+      var r =  noise(xoff, yoff)*255;
+
+      var randRed = map(noise(r), 0,1,0,255);
+      var randGreen = map(noise(r), 0,1,0,255);
+      var randBlue = map(noise(r), 0,1,0,255);
 
 
-  xoff1 += 0.02;
-  xoff2 += 0.02;
+      pixels[index+0] = r;
+      pixels[index+1] = r;
+      pixels[index+2] = r;
+      pixels[index+3] = 255;
+      yoff += inc;
+    }
+    xoff += inc;
+  }
 
-  ellipse(x,y, 24, 24);
+  // noLoop();
+  updatePixels();
 }

@@ -1,7 +1,13 @@
 function setup() {
-  // put setup code here
+  createCanvas(1000, 1000);
+  var save = true;
 }
 
 function draw() {
-  // put drawing code here
+  ellipse(100, 100, 80, 80);
+   if(save){
+     save("simple_circle_output2.png");
+     save = false;
+   }
+
 }
